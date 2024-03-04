@@ -13,6 +13,7 @@ do
             ;;
         "List Databases")
             # replace your listDatabase Function here
+            listDatabases
             ;;
         "Drop a Database")
             # replace your dropDatabase Function here

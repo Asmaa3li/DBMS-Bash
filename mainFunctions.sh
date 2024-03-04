@@ -13,3 +13,15 @@ function createDatabase {
         echo "Error: Enter a valid name" 
     fi 
 }
+
+function listDatabases {
+    if [[ $(ls "./Database" 2>> ./logs.txt | wc -l) == 0 ]] 
+    then
+        echo "You don't have any databases"
+    else
+        for database in `ls ./Database` 
+        do
+            echo $database
+        done
+    fi
+}
