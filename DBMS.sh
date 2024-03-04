@@ -1,14 +1,15 @@
 #!/bin/bash
 
-mkdir ./Database 2>> ./logs.txt
-cd ./Database
+mkdir -p ./Database 2>> ./logs.txt
+# cd ./Database
 echo -e "\n**************************Welcome To Our DBMS**************************\n"
+source ./mainFunctions.sh
 
 select choice in "Create a Database" "List Databases" "Drop a Database" "Connect to a Database" "Exit"
 do 
     case $choice in 
         "Create a Database")
-            # replace your createDatabase Function here
+            createDatabase
             ;;
         "List Databases")
             # replace your listDatabase Function here
@@ -27,4 +28,3 @@ do
             ;;
     esac
 done
-
