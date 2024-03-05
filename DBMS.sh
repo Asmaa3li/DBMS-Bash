@@ -1,13 +1,32 @@
 #!/bin/bash
+source ./mainFunctions.sh
 
 mkdir -p ./Database 2>> ./logs.txt
 # cd ./Database
-echo -e "\n**************************Welcome To Our DBMS**************************\n"
-source ./mainFunctions.sh
+echo -e "\n\e[33m**************************Welcome To Our DBMS**************************\e[0m\n" 
+#source ./mainFunctions.sh
 
+parentMenu
+
+
+
+
+
+
+
+
+
+
+: <<'END_COMMENT'
+PS3="enter number: "
+COLUMNS=12
 select choice in "Create a Database" "List Databases" "Drop a Database" "Connect to a Database" "Exit"
 do 
     case $choice in 
+	"Exit")
+            break
+	    exit i0
+            ;;
         "Create a Database")
             createDatabase
             ;;
@@ -20,12 +39,12 @@ do
             ;;
         "Connect to a Database")
             # replace your connectDatabase Function here
-            ;;
-        "Exit")
-            break 
-            ;;
+	    connectDatabase
+            ;;       
         *)
             echo "Wrong choice!" 
             ;;
     esac
 done
+END_COMMENT
+
