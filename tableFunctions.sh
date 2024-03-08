@@ -82,6 +82,8 @@ COLUMNS=12
 
 #read -p "enter table you want to connect to: " reply 
 
+check=$(cat ./$reply)
+
 if [ -f ./$reply ];
 then
 echo -e "\e[32myou are now inside table $reply ...\e[0m"
@@ -89,37 +91,55 @@ select choice in "Select all" "Select Column" "Select Row" "Enter another table"
 do
     case $choice in
         "Select all")
-         cat "./$reply"
+
+            if [[ -z "$check" ]];
+                then
+                        echo "Empty Table"
+                else
+
+                   echo "$check"
+
+                fi
             ;;
         "Select Column")
 
-        selectColumn
+                if [[ -z "$check" ]];
+                    then
+                        echo "Empty Table"
+                else
 
-       ;;
+                   selectColumn
+
+                fi
+                ;;
 
         "Select Row")
+                if [[ -z "$check" ]];
+                    then
+                        echo "Empty Table"
+                else
+                  echo -e "available columns in $reply are: " 
+                  selectRow
+               fi
+               ;;
 
-
-         echo -e "available columns in $reply are: " 
-          selectRow
-            ;;
         "Enter another table")
 
-        read -p "enter another table " reply
-         selectTable
+        read -p "Enter Another Table: " reply
+        selectTable
 
-           ;;
+               ;;
         "Exit")
             exit
-            ;;
+               ;;
         *)
-            echo -e  "\e[31mWrong choice!\e[0m"  
+            echo -e  "\e[31mWrong Choice!\e[0m"  
             ;;
     esac
 done
 
 else
- echo "teble $reply does not exist in $PWD"
+    echo "Table $reply Does not Exist In $PWD"
 fi
 }
 
@@ -139,15 +159,15 @@ function selectColumn {
                    then
                      selectTable
 
-                    elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
+                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
                         then
                           column_data=$(awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} NR>1{print $column}' "./$reply")
-                          if [ -z "$column_data" ];
+                        if [ -z "$column_data" ];
                             then
                               echo -e "\033[0;33mNo fields yet\033[0m"
-                            else
+                        else
                               echo -e "\e[95m$column_data\e[0m"
-                          fi
+                        fi
                 fi
                ;;
  

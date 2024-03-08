@@ -1,3 +1,6 @@
+source ./tableFunctions.sh
+
+
 function createDatabase {
     read -p "Enter the name of the database you want to create: " name 
     if [[ $name =~ ^[A-Za-z_]+$ && ! $(type -t $name) ]] 
@@ -45,7 +48,6 @@ function dropDatabase {
 
 function connectDatabase {
     # read -p "Write the DB you want to connect to: " reply
-    source ./tableFunctions.sh
     echo -e "\e[95mWrite the DB you want to connect to: \e[0m"
     read -r reply
 
@@ -55,7 +57,7 @@ function connectDatabase {
             COLUMNS=12
             while true;
             do
-                cd ./Database/$reply
+                #cd ./Database/$reply
                 echo -e "\e[32mConnecting to $reply...\e[0m"
                 cd ./Database/$reply
                 PS3=$'\e[36m'"You are now in $reply database, please choose an option: "$'\e[0m'
@@ -64,6 +66,7 @@ function connectDatabase {
                     do
                         case $i in
                         "back to main menu") 
+                            cd ../..
                             parentMenu
                             ;;
                         "Exit")
@@ -74,8 +77,12 @@ function connectDatabase {
                             ;;
                         "list all tables")
                             #add listTables function
-                            echo -e "you have $(ls -1 | wc -l) tables in $reply database: \n$(ls "$PWD")"
-
+                            if [ $(ls -1 | wc -l) -ge 1 ];
+                            then
+                              echo -e "you have $(ls -1 | wc -l) tables in $reply database: \n$(ls "$PWD")"
+                            else
+                              echo "you do not have any tables yet"
+                            fi
                             ;;
                         "delete table")
                             #add deleteTable function
