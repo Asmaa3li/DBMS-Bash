@@ -2,8 +2,7 @@
 source ./mainFunctions.sh
 
 mkdir -p ./Database 2>> ./logs.txt
-# cd ./Database
-echo -e "\n\e[33m**************************Welcome To Our DBMS**************************\e[0m\n" 
+# cd ./Database 
 #source ./mainFunctions.sh
 red="\033[0;31m"
 green="\033[0;32m"

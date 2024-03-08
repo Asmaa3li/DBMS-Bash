@@ -71,6 +71,82 @@ function createTable {
     fi
 }
 
+
+function insertIntoTable {
+    read -p "Enter the table you want to enter your data into: " tableName
+
+    fields=()
+    fieldsType=()
+
+    # Read metadata file line by line
+    if [[ -f "./${tableName}-metadata" ]]; then
+        while IFS='|' read -r fieldName fieldType _; do
+            fields+=("$fieldName")
+            fieldsType+=("$fieldType")
+        done < "./${tableName}-metadata" 
+    else
+        echo "Error: Metadata file '${tableName}-metadata' does not exist!" >> ../../logs.txt
+    fi
+
+    if [[ $tableName =~ ^[A-Za-z_]+$ && -f "./$tableName" ]]; then
+        declare i=0
+        line=""
+        while (( i < ${#fields[@]} )); do
+
+            read -p "Enter the value of field ${fields[i]}: " value
+
+            if [[ ${fieldsType[i]} == "int" ]]; then
+                while [[ ! $value =~ ^[0-9]*$ ]]; do
+                    read -p "Please enter a valid integer value for the field ${fields[i]}: " value
+                done
+
+            elif [[ ${fieldsType[i]} == "string" ]]; then
+                while [[ ! $value =~ ^[a-zA-Z_]*$ ]]; do
+                    read -p "Please enter a valid string value for the field ${fields[i]}: " value
+                done
+            fi
+
+            isFieldPK=$(awk -F'|' -v i="$i" 'NR == i+1 {print $3}' "./${tableName}-metadata")
+            if [[ $isFieldPK == "PK" ]]; then
+                if [[ -z "$value" ]]; then
+                    echo -e "\033[31mThis field can't be null, you must enter a value!\033[0m"
+                    continue
+                fi
+
+                allPrimaryFieldValues=$(cut -d'|' -f ${i+1} "./$tableName") 
+                values_array=($(echo "$allPrimaryFieldValues" | cut -d'|' -f 1)) 
+                duplicate_found=0
+
+                # Check if value is duplicated 
+                allPrimaryFieldValues=$(cut -d'|' -f ${i+1} "./$tableName") 
+
+                # Count occurrences of $value in $allPrimaryFieldValues
+                occurrences=$(echo "$allPrimaryFieldValues" | grep -c "$value")
+
+                # If $occurrences is greater than ot equal 1, value is duplicated
+                if [[ $occurrences -ge 1 ]]; then
+                    echo -e "\033[31mThis value is duplicated, enter a unique value!\033[0m"
+                    continue
+                fi
+            fi 
+            
+            line+="$value"
+            if (( i < ${#fields[@]} - 1 )); then
+                line+="|"
+            fi
+
+            (( i++ ))
+        done
+
+        echo -n "$line" >> "./$tableName"
+        echo >> "./$tableName"
+        echo -e "\033[1;32mData inserted successfully in ${tableName}\033[0m"
+
+    else
+        echo "Table does not exist or invalid table name"
+    fi
+}
+
 function selectTable {
     PS3=$'\e[36m'"Choose number: "$'\e[0m'
     COLUMNS=12
