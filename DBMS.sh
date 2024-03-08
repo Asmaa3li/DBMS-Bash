@@ -2,7 +2,12 @@
 source ./mainFunctions.sh
 
 mkdir -p ./Database 2>> ./logs.txt
+<<<<<<< HEAD
 # cd ./Database 
+=======
+# cd ./Database
+#echo -e "\n\e[33m**************************Welcome To Our DBMS**************************\e[0m\n" 
+>>>>>>> 1a692a9 (delete table function added)
 #source ./mainFunctions.sh
 red="\033[0;31m"
 green="\033[0;32m"
