@@ -167,7 +167,6 @@ function selectTable {
 
                         echo "$check"
 
-<<<<<<< HEAD
                         fi
                     ;;
                 "Select Column")
@@ -176,18 +175,6 @@ function selectTable {
                             then
                                 echo "Empty Table"
                         else
-=======
-#check=$(cat ./$reply)
-
-if [ -f ./$reply ];
-then
-check=$(cat ./$reply)
-echo -e "\e[32myou are now inside table $reply ...\e[0m"
-select choice in "Select all" "Select Column" "Select Row" "Enter another table" "Exit" ;
-do
-    case $choice in
-        "Select all")
->>>>>>> 1a692a9 (delete table function added)
 
                         selectColumn
 
@@ -209,7 +196,6 @@ do
                 read -p "Enter Another Table: " reply
                 selectTable
 
-<<<<<<< HEAD
                     ;;
                 "Exit")
                     exit
@@ -222,39 +208,6 @@ do
     else
         echo "Table $reply Does not Exist In $PWD"
     fi
-=======
-                fi
-                ;;
-
-        "Select Row")
-                if [[ -z "$check" ]];
-                    then
-                        echo "Empty Table"
-                else
-                  echo -e "available columns in $reply are: " 
-                  selectRow
-               fi
-               ;;
-
-        "Enter another table")
-
-        read -p "Enter Another Table: " reply
-        selectTable
-
-               ;;
-        "Exit")
-            exit
-               ;;
-        *)
-            echo -e  "\e[31mWrong Choice!\e[0m"  
-            ;;
-    esac
-done
-
-else
-    echo -e "\033[0;31mTable $reply Does not Exist In This Database\033[0m"
-fi
->>>>>>> 1a692a9 (delete table function added)
 }
 
 
