@@ -129,7 +129,7 @@ function parentMenu {
                 ;;
             "Drop a Database")
                 # replace your dropDatabase Function here
-            dropDatabase
+                dropDatabase
                 ;;
             "Connect to a Database")
                 connectDatabase
