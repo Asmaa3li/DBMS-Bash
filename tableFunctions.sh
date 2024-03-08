@@ -122,3 +122,33 @@ else
  echo "teble $reply does not exist in $PWD"
 fi
 }
+
+
+function selectColumn {
+
+
+        local first_line=`cat ./$reply | head -n 1`
+        column_names=($(echo "$first_line" | tr '|' '\n'))
+
+               PS3="Select an option: "
+               options=("${column_names[@]}" "Exit")
+
+    select column_choice in "${options[@]}"; do
+        if [[ $column_choice == "Exit" ]]; then
+            selectTable
+
+        elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
+                column_data=$(awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} NR>1{print $column}' "./$reply")
+                if [ -z "$column_data" ];
+                then
+                       echo -e "\033[0;33mNo fields yet\033[0m"
+                else
+
+                       echo -e "\e[95m$column_data\e[0m"
+                fi
+
+        fi
+       done
+
+
+}
