@@ -14,7 +14,7 @@ function createTable {
             read -p "Enter the name of field ${i}: " fieldName
 
             # Validate the field name
-            while [[ ! $fieldName =~ ^[A-Za-z_]+$ || $tableSchema =~ "${fieldName} |" ]]; do
+            while [[ ! $fieldName =~ ^[A-Za-z_]+$ || $tableSchema =~ "${fieldName}|" ]]; do
                 read -p "Not a valid name or field already exists, Try again: " fieldName
             done
 
@@ -26,7 +26,7 @@ function createTable {
                 read -p "Invalid field type. Enter a valid field type (${valid_types[*]}): " fieldType
             done
 
-            tableSchema+="${fieldName} | ${fieldType}"
+            tableSchema+="${fieldName}|${fieldType}"
 
             if [ -z $primaryKey ]; then
                 read -p "Do you want the ${fieldName} to be the primary key? Enter yes or no: " answer
@@ -37,7 +37,7 @@ function createTable {
 
                 if [ ${answer,,} == "yes" ]; then
                     primaryKey=${fieldName}
-                    tableSchema+=" | PK"
+                    tableSchema+="|PK"
                     echo -e "\033[32mThe field \"${fieldName}\" is now the Primary Key\033[0m"
                 fi
             fi
@@ -50,7 +50,7 @@ function createTable {
         if [ -z $primaryKey ]; then 
             # If no primary key selected, set the last field as the primary key
             lastField=$(echo "$tableSchema" | awk '{print $1}' | tail -n 1)
-            tableSchema=$(echo "$tableSchema" | sed '$s/$/ | PK\n/')
+            tableSchema=$(echo "$tableSchema" | sed '$s/$/|PK\n/')
             echo -e "\033[32mAs you didn't select a primary key, The field \"${lastField}\" is now the default Primary Key\033[0m"           
         fi
 

@@ -78,7 +78,7 @@ function connectDatabase {
                             #add deleteTable function
                             ;;
                         "insert into table")
-                            #add insertIntoTable function
+                            insertIntoTable
                             ;;
                         "select from table")
                             #add selectFromTable function
@@ -112,15 +112,12 @@ function parentMenu {
                 createDatabase
                 ;;
             "List Databases")
-                # replace your listDatabase Function here
                 listDatabases
                 ;;
             "Drop a Database")
-                # replace your dropDatabase Function here
-            dropDatabase
+                dropDatabase
                 ;;
             "Connect to a Database")
-                # replace your connectDatabase Function here
                 connectDatabase
                 ;;
         "Exit")
