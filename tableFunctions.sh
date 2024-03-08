@@ -70,3 +70,55 @@ function createTable {
         echo "Please enter a valid name or the table already exists"
     fi
 }
+
+
+
+
+function selectTable {
+
+PS3=$'\e[36m'"Choose number: "$'\e[0m'
+
+COLUMNS=12
+
+#read -p "enter table you want to connect to: " reply 
+
+if [ -f ./$reply ];
+then
+echo -e "\e[32myou are now inside table $reply ...\e[0m"
+select choice in "Select all" "Select Column" "Select Row" "Enter another table" "Exit" ;
+do
+    case $choice in
+        "Select all")
+         cat "./$reply"
+            ;;
+        "Select Column")
+
+        selectColumn
+
+       ;;
+
+        "Select Row")
+
+
+         echo -e "available columns in $reply are: " 
+          selectRow
+            ;;
+        "Enter another table")
+
+        read -p "enter another table " reply
+         selectTable
+
+           ;;
+        "Exit")
+            exit
+            ;;
+        *)
+            echo -e  "\e[31mWrong choice!\e[0m"  
+            ;;
+    esac
+done
+
+else
+ echo "teble $reply does not exist in $PWD"
+fi
+}
