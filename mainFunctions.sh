@@ -55,6 +55,7 @@ function connectDatabase {
             COLUMNS=12
             while true;
             do
+                cd ./Database/$reply
                 echo -e "\e[32mConnecting to $reply...\e[0m"
                 cd ./Database/$reply
                 PS3=$'\e[36m'"You are now in $reply database, please choose an option: "$'\e[0m'
@@ -73,6 +74,8 @@ function connectDatabase {
                             ;;
                         "list all tables")
                             #add listTables function
+                            echo -e "you have $(ls -1 | wc -l) tables in $reply database: \n$(ls "$PWD")"
+
                             ;;
                         "delete table")
                             #add deleteTable function
@@ -82,12 +85,15 @@ function connectDatabase {
                             ;;
                         "select from table")
                             #add selectFromTable function
+                            read -p "enter table you want to connect to: " reply
+                    s       electTable
+
                             ;;
                         "update table")
                             #add updateTable function
                             ;;
                         *)
-                            echo "choose from 1 to 7"
+                            echo "choose from 1 to 8"
                             ;;
                     esac
                 done 
@@ -117,7 +123,7 @@ function parentMenu {
                 ;;
             "Drop a Database")
                 # replace your dropDatabase Function here
-            dropDatabase
+                dropDatabase
                 ;;
             "Connect to a Database")
                 # replace your connectDatabase Function here
@@ -127,7 +133,7 @@ function parentMenu {
                 exit
             ;;
             *)
-                echo -e  "\e[31mWrong choice!\e[0m"  
+                echo -e "\e[31mWrong choice!\e[0m"  
                 ;;
         esac
     done
