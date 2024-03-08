@@ -86,7 +86,7 @@ function connectDatabase {
                         "select from table")
                             #add selectFromTable function
                             read -p "enter table you want to connect to: " reply
-                    s       electTable
+                            selectTable
 
                             ;;
                         "update table")

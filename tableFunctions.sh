@@ -126,36 +126,43 @@ fi
 
 function selectColumn {
 
+        local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+        options=("${column_names[@]}" "Exit")
+        PS3="Select an option: "
+    
+        select column_choice in "${options[@]}"; 
+          do
+            case $REPLY in
+             [1-${#options[@]}])
 
-        local first_line=`cat ./$reply | head -n 1`
-        column_names=($(echo "$first_line" | tr '|' '\n'))
+                if [[ $column_choice == "Exit" ]]; 
+                   then
+                     selectTable
 
-               PS3="Select an option: "
-               options=("${column_names[@]}" "Exit")
-
-    select column_choice in "${options[@]}"; do
-        if [[ $column_choice == "Exit" ]]; then
-            selectTable
-
-        elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
-                column_data=$(awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} NR>1{print $column}' "./$reply")
-                if [ -z "$column_data" ];
-                then
-                       echo -e "\033[0;33mNo fields yet\033[0m"
-                else
-
-                       echo -e "\e[95m$column_data\e[0m"
+                    elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
+                        then
+                          column_data=$(awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} NR>1{print $column}' "./$reply")
+                          if [ -z "$column_data" ];
+                            then
+                              echo -e "\033[0;33mNo fields yet\033[0m"
+                            else
+                              echo -e "\e[95m$column_data\e[0m"
+                          fi
                 fi
+               ;;
+ 
+             *)
+                echo -e "\033[0;31mInvalid Input\033[0m"
+        ;;
 
-        fi
-       done
-
+            esac
+         done
 }
 
 
 function selectRow {
-     local first_line=`cat ./$reply | head -n 1`
-     local column_names=($(echo "$first_line" | tr '|' '\n'))
+
+     local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
      local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
      local value_found=false
 
@@ -163,31 +170,40 @@ function selectRow {
      PS3="Choose option: "
      options=("${column_names[@]}" "Exit")
 
-     select column_choice in "${options[@]}"; do
+    select column_choice in "${options[@]}";
+      do
+        case $REPLY in
+           [1-${#options[@]}])
+             if [[ $column_choice == "Exit" ]]; 
+                then
+                   exit
 
-        if [[ $column_choice == "Exit" ]]; then
-            exit
+                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
+                   then
+                     read -p "Enter value: " value
+                     echo "Matching rows for $column_choice = $value:"
 
-        elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
-          read -p "Enter value: " value
-        echo "Matching rows for $column_choice = $value:"
+                for line in $var; do
+                   if [[ "$line" == *"$value"* ]]; 
+                     then
+                        echo -e "\033[0;95m$line\033[0m"
+                       value_found=true
+                       selectTable
+                   fi
+               done
 
+               if [[ "$value_found" == false ]]; 
+                 then
+                  echo "$value does not exist"
+               fi
+          fi
+          ;;
 
-        for line in $var; do
-    if [[ "$line" == *"$value"* ]]; then
-        echo "$line"
-        value_found=true
-        selectTable
-
-    fi
-done
-
-if [[ "$value_found" == false ]]; then
-    echo "$value does not exist"
-fi
-
-fi
-done
+          *)
+            echo -e "\033[0;31mInvalid Input\033[0m"
+          ;;
+        esac
+     done
 }
 
 
