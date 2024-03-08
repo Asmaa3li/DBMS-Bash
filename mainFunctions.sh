@@ -128,7 +128,6 @@ function parentMenu {
                 listDatabases
                 ;;
             "Drop a Database")
-                # replace your dropDatabase Function here
                 dropDatabase
                 ;;
             "Connect to a Database")

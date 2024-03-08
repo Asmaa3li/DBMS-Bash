@@ -71,124 +71,110 @@ function createTable {
     fi
 }
 
-
-
-
 function selectTable {
+    PS3=$'\e[36m'"Choose number: "$'\e[0m'
+    COLUMNS=12
+    #read -p "enter table you want to connect to: " reply 
+    check=$(cat ./$reply)
 
-PS3=$'\e[36m'"Choose number: "$'\e[0m'
+    if [ -f ./$reply ]; then
+        echo -e "\e[32myou are now inside table $reply ...\e[0m"
+        select choice in "Select all" "Select Column" "Select Row" "Enter another table" "Exit" ;
+        do
+            case $choice in
+                "Select all")
 
-COLUMNS=12
+                    if [[ -z "$check" ]];
+                        then
+                                echo "Empty Table"
+                        else
 
-#read -p "enter table you want to connect to: " reply 
+                        echo "$check"
 
-check=$(cat ./$reply)
+                        fi
+                    ;;
+                "Select Column")
 
-if [ -f ./$reply ];
-then
-echo -e "\e[32myou are now inside table $reply ...\e[0m"
-select choice in "Select all" "Select Column" "Select Row" "Enter another table" "Exit" ;
-do
-    case $choice in
-        "Select all")
+                        if [[ -z "$check" ]];
+                            then
+                                echo "Empty Table"
+                        else
 
-            if [[ -z "$check" ]];
-                then
-                        echo "Empty Table"
-                else
+                        selectColumn
 
-                   echo "$check"
+                        fi
+                        ;;
 
-                fi
-            ;;
-        "Select Column")
+                "Select Row")
+                        if [[ -z "$check" ]];
+                            then
+                                echo "Empty Table"
+                        else
+                        echo -e "available columns in $reply are: " 
+                        selectRow
+                    fi
+                    ;;
 
-                if [[ -z "$check" ]];
-                    then
-                        echo "Empty Table"
-                else
+                "Enter another table")
 
-                   selectColumn
+                read -p "Enter Another Table: " reply
+                selectTable
 
-                fi
-                ;;
-
-        "Select Row")
-                if [[ -z "$check" ]];
-                    then
-                        echo "Empty Table"
-                else
-                  echo -e "available columns in $reply are: " 
-                  selectRow
-               fi
-               ;;
-
-        "Enter another table")
-
-        read -p "Enter Another Table: " reply
-        selectTable
-
-               ;;
-        "Exit")
-            exit
-               ;;
-        *)
-            echo -e  "\e[31mWrong Choice!\e[0m"  
-            ;;
-    esac
-done
-
-else
-    echo "Table $reply Does not Exist In $PWD"
-fi
+                    ;;
+                "Exit")
+                    exit
+                    ;;
+                *)
+                    echo -e  "\e[31mWrong Choice!\e[0m"  
+                    ;;
+            esac
+        done
+    else
+        echo "Table $reply Does not Exist In $PWD"
+    fi
 }
 
 
 function selectColumn {
 
-        local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
-        options=("${column_names[@]}" "Exit")
-        PS3="Select an option: "
-    
-        select column_choice in "${options[@]}"; 
-          do
-            case $REPLY in
-             [1-${#options[@]}])
+    local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+    options=("${column_names[@]}" "Exit")
+    PS3="Select an option: "
 
-                if [[ $column_choice == "Exit" ]]; 
-                   then
-                     selectTable
+    select column_choice in "${options[@]}"; 
+        do
+            case $REPLY in
+                [1-${#options[@]}])
+
+                if [[ $column_choice == "Exit" ]]; then
+                    selectTable
 
                 elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
+                    then
+                        column_data=$(awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} NR>1{print $column}' "./$reply")
+                    if [ -z "$column_data" ];
                         then
-                          column_data=$(awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} NR>1{print $column}' "./$reply")
-                        if [ -z "$column_data" ];
-                            then
-                              echo -e "\033[0;33mNo fields yet\033[0m"
-                        else
-                              echo -e "\e[95m$column_data\e[0m"
-                        fi
+                            echo -e "\033[0;33mNo fields yet\033[0m"
+                    else
+                            echo -e "\e[95m$column_data\e[0m"
+                    fi
                 fi
-               ;;
- 
-             *)
-                echo -e "\033[0;31mInvalid Input\033[0m"
-        ;;
+                ;;
 
+                *)
+                    echo -e "\033[0;31mInvalid Input\033[0m"
+                    ;;
             esac
-         done
+        done
 }
 
-
 function selectRow {
+    local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+    local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
+    local value_found=false
 
-     local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
-     local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
-     local value_found=false
-
-
-     PS3="Choose option: "
-     options=("${column_names[@]}" "Exit")
+    PS3="Choose option: "
+    options=("${column_names[@]}" "Exit")
 
     select column_choice in "${options[@]}";
       do
