@@ -150,5 +150,49 @@ function selectColumn {
         fi
        done
 
-
 }
+
+
+function selectRow {
+     local first_line=`cat ./$reply | head -n 1`
+     local column_names=($(echo "$first_line" | tr '|' '\n'))
+     local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
+     local value_found=false
+
+
+     PS3="Choose option: "
+     options=("${column_names[@]}" "Exit")
+
+     select column_choice in "${options[@]}"; do
+
+        if [[ $column_choice == "Exit" ]]; then
+            exit
+
+        elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
+          read -p "Enter value: " value
+        echo "Matching rows for $column_choice = $value:"
+
+
+        for line in $var; do
+    if [[ "$line" == *"$value"* ]]; then
+        echo "$line"
+        value_found=true
+        selectTable
+
+    fi
+done
+
+if [[ "$value_found" == false ]]; then
+    echo "$value does not exist"
+fi
+
+fi
+done
+}
+
+
+
+
+
+
+
