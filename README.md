@@ -14,8 +14,8 @@ Main Menu:
 * Connect To Databases
 * Drop Database
 * Exit
-and upon user Connect to Specific Database, there will be new Screen with
-this Menu:
+* 
+And upon user Connect to Specific Database, there will be new Screen with this Menu:
 * Create table
 * List all tables
 * Insert into table
