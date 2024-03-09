@@ -293,6 +293,127 @@ function selectRow {
 }
 
 
+function deleteTable {
+        read -p "enter table you want to connect to: " reply
+  if [ -f ./$reply ];
+ then
+ echo -e "\e[32myou are now inside table $reply ...\e[0m"
+ select choice in "Delete All" "Delete Column" "Delete Row" "Drop Table" "Exit" ;
+ do
+    case $choice in
+
+         "Delete All")
+                 cat /dev/null > ./$reply
+                 echo "Content Deleted Successfully.."
+                 ;;
+
+        "Delete Column")
+                deleteColumn
+            ;;
+        "Delete Row")
+                deleteRow
+
+        #selectColumn
+
+       ;;
+
+        "Drop Table")
+
+         read -p "Are You Sure You Want To Drop This Table(y/n)? " answer
+
+         # selectRow
+
+         if [ $answer == 'y' ];
+         then
+                 rm ./$reply && rm ./$reply-metadata
+                  echo -e  "\e[32mTable Deleted Successfully Now You Are Back To Main Menu...\e[0m"
+                  parentMenu
+
+         else
+                  selectTable
+         fi
+           ;;
+        "Exit")
+            exit
+            ;;
+        *)
+         echo -e  "\e[31mWrong choice!\e[0m"  
+            ;;
+    esac
+done
+
+else
+ echo -e "\033[0;31mtable $reply does not exist in $PWD\033[0m"
+fi
+}
+
+function deleteRow {
+    local column_names=($(head -n 1 "./$reply" | tr '|' '\n'))
+    local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
+    local value_found=false
+
+    PS3="Choose option: "
+    options=("${column_names[@]}" "Exit")
+
+    select column_choice in "${options[@]}"; do
+        case $REPLY in
+            [1-${#options[@]}])
+                if [[ $column_choice == "Exit" ]]; then
+                    exit
+                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
+                    read -p "Enter value: " value
+                    echo "Matching rows for $column_choice = $value:"
+                    value_found=false
+
+                    if [[ -z "$var" ]]; then
+                        echo "Empty table"
+                    else
+                        while IFS= read -r line; do
+                            if [[ "$line" == *"$value"* ]]; then
+                                echo -e "\033[0;95m$line\033[0m"
+                                value_found=true
+                            fi
+                        done <<< "$var"
+
+                        if [[ "$value_found" == true ]]; then
+                            awk -F "|" -v value="$value" '$0 !~ value' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                            echo "Row(s) containing $value deleted successfully."
+                        else
+                            echo "$value does not exist in any row."
+                        fi
+                    fi
+                fi
+                ;;
+            *)
+                echo -e "\033[0;31mInvalid Input\033[0m"
+                ;;
+        esac
+    done
+}
+function deleteColumn {
+    local column_names=($(head -n 1 "./$reply" | tr '|' '\n'))
+    PS3="Select a column to delete or exit: "
+    options=("${column_names[@]}" "Exit")
+
+    select column_choice in "${options[@]}"; do
+
+        case $REPLY in
+            [1-$(( ${#column_names[@]} + 1 ))])
+                if [[ $column_choice == "Exit" ]]; then
+                    exit
+                else
+
+                    awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { $column=""; sub(/\|/, ""); print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                    echo "Column '$column_choice' deleted successfully."
+                fi
+                ;;
+            *)
+                echo -e "\033[0;31mInvalid Input\033[0m"
+                ;;
+        esac
+    done
+}
+
 
 
 
