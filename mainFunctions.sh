@@ -99,6 +99,7 @@ function connectDatabase {
                             ;;
                         "update table")
                             #add updateTable function
+                            updateTable
                             ;;
                         *)
                             echo "choose from 1 to 8"

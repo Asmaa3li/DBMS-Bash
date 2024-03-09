@@ -391,28 +391,34 @@ function deleteRow {
     done
 }
 
-function deleteColumn {
+deleteColumn() {
     # Read column names from metadata file
     local column_names=($(awk -F '|' '{print $1}' "${reply}-metadata"))
     PS3="Select a column to delete or exit: "
+    
     options=("${column_names[@]}" "Exit")
 
     select column_choice in "${options[@]}"; do
         case $REPLY in
-            [1-$(( ${#column_names[@]} + 1 ))])
+            [1-$(( ${#options[@]} ))])
                 if [[ $column_choice == "Exit" ]]; then
                     exit
                 else
                     # Check if the selected column is the primary key
                     local primary_key_column=$(awk -F '|' '{ if ($3 == "PK") print $1 }' "${reply}-metadata")
                     if [[ $column_choice == "$primary_key_column" ]]; then
-                    echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
-
+                        echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
                     else
                         # Delete the selected column
                         awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { $column=""; sub(/\|/, ""); print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
                         echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
 
+                        # Remove the deleted column from column_names array
+                        unset 'column_names[$REPLY-1]'
+                        column_names=("${column_names[@]}")
+
+                        # Update the metadata file
+                        awk -v deleted_column="$column_choice" -F '|' 'BEGIN{OFS=FS} $1 != deleted_column { print }' "${reply}-metadata" > "${reply}-metadata.tmp" && mv "${reply}-metadata.tmp" "${reply}-metadata"
                     fi
                 fi
                 ;;
@@ -422,6 +428,16 @@ function deleteColumn {
         esac
     done
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
