@@ -3,7 +3,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 
 # Installation
 * Clone the repository:git `clone https://github.com/Asmaa3li/DBMS-Bash.git`
-* Run the dbms.sh script ./dbms.sh
+* Run the dbms.sh script `./dbms.sh`
 
 # Features 
 Main Menu:
@@ -18,11 +18,20 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 * List all tables
 * Insert into table
 * Select from table
+    * Select all
+    * Select Column
+    * Select Row
+    * Enter another table
+    * Exit
 * Delete table
+    * delete all
+    * delete Column
+    * delete Row
+    * drop table 
 * Update table
 * Back to main menu
 * Exit
 
-# Contributers 
+# Contributors 
 
 * Aisha Fathy
