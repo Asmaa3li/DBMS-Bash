@@ -430,6 +430,76 @@ deleteColumn() {
 }
 
 
+function updateTable {
+    read -p "Enter table name: " reply
+    
+    # Check if the table exists
+    if [[ ! -f "./$reply" ]]; then
+        echo "Table '$reply' does not exist"
+        return
+    fi
+
+    # Check if the table is empty
+    if [[ ! -s "./$reply" ]]; then
+        echo "Table '$reply' is empty"
+        return
+    fi
+
+    metadata="./$reply-metadata"
+    
+    # Extract column names and data types from metadata
+    local column_names=()
+    local data_types=()
+    local primary_key_column=""
+    while IFS='|' read -r column_name data_type constraints; do
+        column_names+=("$column_name")
+        data_types+=("$data_type")
+        if [[ "$constraints" == "PK" ]]; then
+            primary_key_column="$column_name"
+        fi
+    done < "$metadata"
+
+    PS3="Select a column to update or Exit: "
+    options=("${column_names[@]}" "Exit")
+
+    select column_choice in "${options[@]}"; do
+        case $REPLY in
+            [1-$(( ${#column_names[@]} + 1 ))])
+                if [[ $column_choice == "Exit" ]]; then
+                    exit
+                elif [[ $column_choice == "$primary_key_column" ]]; then
+                   echo -e "\e[31mYou cannot update the primary key column.\e[0m"
+                else
+                    column_index=$((REPLY - 1))
+                    read -p "Enter the old value for $column_choice: " old_value
+                    
+                    if ! awk -F "|" -v column="$REPLY" -v old="$old_value" '$column == old { found=1; exit } END { exit !found }' "./$reply"; then
+                        echo -e "\e[31mOld value '$old_value' does not exist in column '$column_choice'\e[0m"
+                        continue
+                    fi
+                    
+                    read -p "Enter the new value for $column_choice: " new_value
+
+                    # Validate data type for the new value
+                    if [[ ${data_types[$column_index]} == "int" && ! $new_value =~ ^[0-9]+$ ]]; then
+                        echo "Invalid data type for $column_choice. Must be an integer."
+                    elif [[ ${data_types[$column_index]} == "string" && ! $new_value =~ ^[a-zA-Z]+$ ]]; then
+                    echo -e "\e[31mInvalid data type for $column_choice. Must be a string.\e[0m"
+                    else
+                        # move old value into tmp
+                        awk -F "|" -v column="$REPLY" -v old="$old_value" -v new="$new_value" 'BEGIN{OFS=FS} { if ($column == old) $column = new; print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+
+                        echo -e "\e[32mColumn '$column_choice' updated successfully.\e[0m"
+                    fi
+                fi
+                ;;
+            *)
+                echo "Invalid Input"
+                ;;
+        esac
+    done
+}
+
 
 
 
