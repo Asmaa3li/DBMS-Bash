@@ -73,6 +73,10 @@ function createTable {
 
 
 function insertIntoTable {
+    if [[ $(ls | wc -l) == 0 ]]; then
+        echo -e "\033[0;33mYou don't have any tables yet!\033[0m"
+        return
+    fi
     read -p "Enter the table you want to enter your data into: " tableName
 
     fields=()
