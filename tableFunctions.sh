@@ -201,7 +201,7 @@ function selectTable {
                                 echo "Empty Table"
                         else
                         echo -e "available columns in $reply are: " 
-                        selectRow
+                        selectRow "$reply"
                     fi
                     ;;
 
@@ -309,7 +309,6 @@ function selectRow {
         done
     done
 }
-
 
 function deleteTable {
         read -p "enter table you want to connect to: " reply
@@ -516,4 +515,3 @@ function updateTable {
         esac
     done
 }
-
