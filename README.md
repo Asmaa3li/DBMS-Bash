@@ -12,7 +12,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Drop Database
 * Exit
   
-<img src="images/image1.png" alt="Image 1" width="200" height="200">
+<img src="images/1.png" alt="Image 1" width="200" height="200">
 
 
 # Connect To Database Menu:
