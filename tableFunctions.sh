@@ -427,15 +427,15 @@ deleteColumn() {
                         echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
                     else
                         # Delete the selected column
-		                awk -v column=$REPLY 'BEGIN {FS = OFS="|"} {if(NR > 0) {sub($column,"",$column)} print $0 >"'$reply'"}' $reply
+		                awk -v column=$REPLY 'BEGIN {FS = OFS="|"} {if(NR > 1) {sub($column,"")} print $0 >"'$reply'"}' $reply
+                        
+                        cat "./$reply" | sed 's/\||/\|/' > "'${reply}'"
+
                         echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
 
                         # Remove the deleted column from column_names array
                         unset 'column_names[$REPLY-1]'
                         column_names=("${column_names[@]}")
-
-                        # Update the metadata file
-                        awk -v deleted_column="$column_choice" -F '|' 'BEGIN{OFS=FS} $1 != deleted_column { print }' "${reply}-metadata" > "${reply}-metadata.tmp" && mv "${reply}-metadata.tmp" "${reply}-metadata"
                     fi
                 fi
                 ;;
