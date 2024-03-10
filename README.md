@@ -53,7 +53,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 4. Each field, other than the primary key, can be NULL.
   
 <div style="text-align: center;">
-    <img src="images/5.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+    <img src="images/5.png" alt="Image 1" width="700" height="400" style="margin: 0 auto;">
 </div>
 
 ### 4. Select from table
