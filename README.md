@@ -35,14 +35,14 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 6. You will be able to review the table schema before confirming the creation of the table.
 
 <div style="text-align: center;">
-    <img src="images/3.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+    <img src="images/3.png" alt="Image 1" width="700" height="400" style="margin: 0 auto;">
 </div>
 
 
 ### 2- List all tables
 
 <div style="text-align: center;">
-    <img src="images/4.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+    <img src="images/4.png" alt="Image 1" width="700" height="150" style="margin: 0 auto;">
 </div>
 
 ### 3- Insert into a table
