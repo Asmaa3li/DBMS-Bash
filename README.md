@@ -35,9 +35,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 
 ### 2- List all tables
 
-<div style="text-align: center;">
-    <img src="images/4.png" alt="Image 1" width="700" height="250">
-</div>
+    <img src="images/4.png" alt="Image 1" width="700" height="225">
 
 ### 3- Insert into a table
 #### Notes:
@@ -46,9 +44,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 3. The primary key field cannot be NULL.
 4. Each field, other than the primary key, can be NULL.
   
-<div style="text-align: center;">
-    <img src="images/5.png" alt="Image 1" width="700" height="400" style="margin: 0 auto;">
-</div>
+    <img src="images/5.png" alt="Image 1" width="700" height="400">
 
 ### 4. Select from table
   * Select all<br>
