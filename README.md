@@ -12,7 +12,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Drop Database
 * Exit
   
-<img src="images/1.png" alt="Image 1" width="400" height="200">
+<img src="images/1.png" alt="Image 1" width="450" height="200">
 
 
 # Connect To Database Menu:
@@ -35,7 +35,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 
 ### 2- List all tables
 
-  <img src="images/4.png" alt="Image 1" width="400" height="225">
+   <img src="images/4.png" alt="Image 1" width="400" height="225">
 
 ### 3- Insert into a table
 #### Notes:
@@ -44,7 +44,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 3. The primary key field cannot be NULL.
 4. Each field, other than the primary key, can be NULL.
   
-      <img src="images/5.png" alt="Image 1" width="400" height="400">
+   <img src="images/5.png" alt="Image 1" width="400" height="400">
 
 ### 4. Select from table
   * Select all<br>
@@ -53,7 +53,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * Enter another table<br>
   * Exit
 
-      <img src="images/6.png" alt="Image 1" width="400">
+    <img src="images/6.png" alt="Image 1" width="400">
 
 ### 5. Delete table
   * delete all<br>
@@ -61,7 +61,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * delete Row<br>
   * drop table
       
-      <img src="images/7.png" alt="Image 1" width="400">
+    <img src="images/7.png" alt="Image 1" width="400">
 
 ### 6- Update table
 ### 7- Back to main menu
