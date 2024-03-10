@@ -12,7 +12,7 @@ Main Menu:
 * Connect To Databases
 * Drop Database
 * Exit
- ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/70234de3-7c5d-4b85-b360-ddcf57a5e7d5)
+![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/70234de3-7c5d-4b85-b360-ddcf57a5e7d5)
 
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)
@@ -26,7 +26,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
     * Select Row
     * Enter another table
     * Exit
-    ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/1add22ae-4219-4ad8-b417-89d2661a73d9)
+![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/1add22ae-4219-4ad8-b417-89d2661a73d9)
 
 * Delete table
     * delete all
