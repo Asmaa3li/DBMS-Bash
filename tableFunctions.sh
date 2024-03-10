@@ -428,9 +428,6 @@ deleteColumn() {
                     else
                         # Delete the selected column
 		                awk -v column=$REPLY 'BEGIN {FS = OFS="|"} {if(NR > 1) {sub($column,"")} print $0 >"'$reply'"}' $reply
-                        
-                        cat "./$reply" | sed 's/\||/\|/' > "'${reply}'"
-
                         echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
 
                         # Remove the deleted column from column_names array
