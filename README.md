@@ -28,6 +28,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 3. Enter a valid field type.
 4. Field names must not be duplicated.
 5. If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the last field will be designated as the default primary key.
+6. You will be able to review the table schema before confirming the creation of the table.
 
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/834ed12a-a4fa-4463-a2f1-032147121b61)
 
