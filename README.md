@@ -30,7 +30,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 5. If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the last field will be designated as the default primary key.
 6. You will be able to review the table schema before confirming the creation of the table.
 
-      <img src="images/3.png" alt="Image 1" width="400" height="400">
+   <img src="images/3.png" alt="Image 1" width="400" height="400">
 
 
 ### 2- List all tables
