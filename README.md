@@ -12,17 +12,13 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Drop Database
 * Exit
   
-<div style="text-align: center;">
-    <img src="images/1.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
-</div>
+<img src="images/1.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
 
 
 # Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-<div style="text-align: center;">
-    <img src="images/2.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
-</div>
+<img src="images/2.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
 
 
 ### 1- Create a Table
