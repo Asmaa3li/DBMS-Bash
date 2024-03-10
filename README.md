@@ -21,13 +21,14 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)
 
 
-### Create table
-    * Enter the number of the fields
-    * Enter a valid field name.
-    * Enter a valid field type.
-    * Field names must not be duplicated.
-    * If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the 
-      last field will be designated as the default primary key.
+### Create Table
+#### Notes:
+1. Enter the number of fields.
+2. Enter a valid field name.
+3. Enter a valid field type.
+4. Field names must not be duplicated.
+5. If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the last field will be designated as the default primary key.
+
   
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/834ed12a-a4fa-4463-a2f1-032147121b61)
 
