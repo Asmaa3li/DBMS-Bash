@@ -21,7 +21,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)
 
 
-### 1- Create Table
+### 1- Create a Table
 #### Notes:
 1. Enter the number of fields.
 2. Enter a valid field name.
@@ -36,7 +36,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/6f1f7453-dc34-4a94-ab76-60a1e3aaafbb)
 
-### 3- Insert into table
+### 3- Insert into a table
 #### Notes:
 1. Enter valid values for each field.
 2. The primary key field must have unique values.
@@ -45,7 +45,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/2255a490-d64c-419d-8968-3d85c88b3c60)
 
-## 4- Select from table
+# 4- Select from table
     * Select all
     * Select Column
     * Select Row
@@ -54,7 +54,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
       
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/1add22ae-4219-4ad8-b417-89d2661a73d9)
 
-## 5- Delete table
+# 5- Delete table
     * delete all
     * delete Column
     * delete Row
