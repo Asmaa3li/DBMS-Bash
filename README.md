@@ -18,7 +18,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 # Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-  <img src="images/2.png" alt="Image 1" width="700">
+<img src="images/2.png" alt="Image 1" width="700">
 
 
 ### 1- Create a Table
