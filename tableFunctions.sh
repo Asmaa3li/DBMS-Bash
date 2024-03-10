@@ -151,16 +151,6 @@ function insertIntoTable {
     fi
 }
 
-function listTables {
-    local tables=$(ls | grep -v "\-metadata$")
-    local table_count=$(echo "$tables" | wc -l)
-    if [ $table_count -ge 1 ]; then
-        echo -e "You have $table_count table(s) in $(basename "$PWD") database:\n$tables"
-    else
-        echo "You do not have any tables yet."
-    fi
-}
-
 function selectTable {
     PS3=$'\e[36m'"Choose number: "$'\e[0m'
     COLUMNS=12
@@ -438,6 +428,7 @@ deleteColumn() {
         esac
     done
 }
+
 
 function updateTable {
     read -p "Enter table name: " reply
