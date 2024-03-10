@@ -42,7 +42,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 ### 2- List all tables
 
 <div style="text-align: center;">
-    <img src="images/4.png" alt="Image 1" width="700" height="150" style="margin: 0 auto;">
+    <img src="images/4.png" alt="Image 1" width="700" height="250" style="margin: 0 auto;">
 </div>
 
 ### 3- Insert into a table
