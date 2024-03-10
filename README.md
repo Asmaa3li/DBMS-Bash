@@ -18,7 +18,8 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 # Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)
+<img src="![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)" alt="Image" width="200" height="200">
+
 
 **Create table**
     * Enter the number of the fields
@@ -60,9 +61,5 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/94a14d85-ff4f-4c8a-805e-bd2075add956)
 
 **Update table**
-* Back to main menu
-* Exit
-
-# Contributors 
-* Asmaa Ali
-* Aisha Fathy
+**Back to main menu**
+**Exit**
