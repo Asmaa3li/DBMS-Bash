@@ -12,8 +12,8 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Drop Database
 * Exit
   
-<div style="text-align:center;">
-    <img src="images/1.png" alt="Image 1" height="200">
+<div style="display: flex; justify-content: center;">
+    <img src="images/1.png" alt="Image 1" width="1000" height="200">
 </div>
 
 
