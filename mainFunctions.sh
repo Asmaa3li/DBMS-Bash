@@ -76,13 +76,7 @@ function connectDatabase {
                             createTable    
                             ;;
                         "list all tables")
-                            #add listTables function
-                            if [ $(ls -1 | wc -l) -ge 1 ];
-                            then
-                              echo -e "you have $(ls -1 | wc -l) tables in $reply database: \n$(ls "$PWD")"
-                            else
-                              echo "you do not have any tables yet"
-                            fi
+                            listTables
                             ;;
                         "delete table")
                             #add deleteTable function
