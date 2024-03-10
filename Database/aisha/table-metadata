@@ -1,4 +1,4 @@
 id|int|PK
-age|int
 name|string
+age|int
 salary|int

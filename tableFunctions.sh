@@ -173,43 +173,33 @@ function selectTable {
         do
             case $choice in
                 "Select all")
-
                     if [[ -z "$check" ]];
-                        then
-                                echo "Empty Table"
-                        else
-
-                        echo "$check"
-
-                        fi
+                    then
+                        echo "Empty Table"
+                    else
+                        echo "$check" | awk -F'|' '{if(NR>1) {print $0}}'
+                    fi
                     ;;
                 "Select Column")
-
-                        if [[ -z "$check" ]];
-                            then
-                                echo "Empty Table"
-                        else
-
+                    if [[ -z "$check" ]];
+                    then
+                        echo "Empty Table"
+                    else
                         selectColumn
-
-                        fi
-                        ;;
-
+                    fi
+                    ;;
                 "Select Row")
-                        if [[ -z "$check" ]];
-                            then
-                                echo "Empty Table"
-                        else
+                    if [[ -z "$check" ]];
+                    then
+                        echo "Empty Table"
+                    else
                         echo -e "available columns in $reply are: " 
                         selectRow "$reply"
                     fi
                     ;;
-
                 "Enter another table")
-
-                read -p "Enter Another Table: " reply
-                selectTable
-
+                    read -p "Enter Another Table: " reply
+                    selectTable
                     ;;
                 "Exit")
                     exit
@@ -466,7 +456,7 @@ deleteColumn() {
                         echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
                     else
                         # Delete the selected column
-                        awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { $column=""; sub(/\|/, ""); print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+		                awk -v column=$REPLY 'BEGIN {FS = OFS="|"} {if(NR > 1) {sub($column,"",$column)} print $0 >"'$reply'"}' $reply
                         echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
 
                         # Remove the deleted column from column_names array
