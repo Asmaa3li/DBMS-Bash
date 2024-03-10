@@ -201,7 +201,7 @@ function selectTable {
                                 echo "Empty Table"
                         else
                         echo -e "available columns in $reply are: " 
-                        selectRow
+                        selectRow "$reply"
                     fi
                     ;;
 
@@ -258,48 +258,89 @@ function selectColumn {
         done
 }
 
-function selectRow {
-    local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
-    local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
-    local value_found=false
+# function selectRow {
+#     local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+#     local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
+#     local value_found=false
 
-    PS3="Choose option: "
+#     PS3="Choose option: "
+#     options=("${column_names[@]}" "Exit")
+
+#     select column_choice in "${options[@]}";
+#       do
+#         case $REPLY in
+#            [1-${#options[@]}])
+#              if [[ $column_choice == "Exit" ]]; 
+#                 then
+#                    exit
+
+#                 elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
+#                    then
+#                      read -p "Enter value: " value
+#                      echo "Matching rows for $column_choice = $value:"
+
+#                 for line in $var; do
+#                    if [[ "$line" == *"$value"* ]]; 
+#                      then
+#                         echo -e "\033[0;95m$line\033[0m"
+#                        value_found=true
+#                        selectTable
+#                    fi
+#                done
+
+#                if [[ "$value_found" == false ]]; 
+#                  then
+#                   echo "$value does not exist"
+#                fi
+#           fi
+#           ;;
+
+#           *)
+#             echo -e "\033[0;31mInvalid Input\033[0m"
+#           ;;
+#         esac
+#      done
+# }
+
+function selectRow {
+    local reply="$1"
+    # local column_names=($(head -n 1 "${reply}-metadata" | tr '|' '\n'))
+    local column_names=($(awk -F '|' '{print $1}' "${reply}-metadata"))
+
+    PS3="Choose column to search: "
     options=("${column_names[@]}" "Exit")
 
-    select column_choice in "${options[@]}";
-      do
+    select column_choice in "${options[@]}"; do
         case $REPLY in
-           [1-${#options[@]}])
-             if [[ $column_choice == "Exit" ]]; 
-                then
-                   exit
+            [1-${#options[@]}])
+                if [[ $column_choice == "Exit" ]]; then
+                    exit
+                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
+                    read -p "Enter value: " value
+                    echo "Matching rows for $column_choice = $value:"
 
-                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
-                   then
-                     read -p "Enter value: " value
-                     echo "Matching rows for $column_choice = $value:"
+                    found=false
+                    while IFS= read -r line; do
+                        column_value=$(echo "$line" | cut -d '|' -f "$REPLY")
+                        if [[ "$column_value" == "$value" ]]; then
+                            echo -e "\033[0;95m$line\033[0m"
+                            found=true
+                        fi
+                    done < "$reply"
 
-                for line in $var; do
-                   if [[ "$line" == *"$value"* ]]; 
-                     then
-                        echo -e "\033[0;95m$line\033[0m"
-                       value_found=true
-                       selectTable
-                   fi
-               done
+                    if ! $found; then
+                        echo -e "\033[0;31m$value does not exist\033[0m"  
 
-               if [[ "$value_found" == false ]]; 
-                 then
-                  echo "$value does not exist"
-               fi
-          fi
-          ;;
-
-          *)
-            echo -e "\033[0;31mInvalid Input\033[0m"
-          ;;
+                    fi
+                else
+                    echo "Invalid option"
+                fi
+                ;;
+            *)
+                echo -e "\033[0;31mInvalid Input\033[0m"
+                ;;
         esac
-     done
+    done
 }
 
 
