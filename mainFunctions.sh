@@ -116,7 +116,7 @@ function connectDatabase {
 }
 
 function parentMenu {
-    PS3=$'\e[36m'"Choose number: "$'\e[0m'
+    PS3=$'\e[36m'"Select an option: "$'\e[0m'
 
     COLUMNS=12
 
