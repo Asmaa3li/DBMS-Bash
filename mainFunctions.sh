@@ -86,6 +86,7 @@ function connectDatabase {
                             ;;
                         "delete table")
                             #add deleteTable function
+                            deleteTable
                             ;;
                         "insert into table")
                             insertIntoTable

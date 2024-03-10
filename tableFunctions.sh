@@ -62,6 +62,11 @@ function createTable {
         if [[ ${confirm,,} == "yes" ]]; then
             echo -e $tableSchema > ./"${name}-metadata"
             touch ./$name
+
+            # Add field names to the first line of the table file
+            fieldNames=$(echo -e "$tableSchema" | awk -F'|' '{printf "%s|", $1}' | sed 's/|$//' )
+            echo "$fieldNames" > $name
+
             echo -e "\033[32mYour table has been created successfully!\033[0m"
         else
             echo "Table creation aborted."
@@ -71,24 +76,26 @@ function createTable {
     fi
 }
 
-
 function insertIntoTable {
-    read -p "Enter the table you want to enter your data into: " tableName
-
-    fields=()
-    fieldsType=()
-
-    # Read metadata file line by line
-    if [[ -f "./${tableName}-metadata" ]]; then
-        while IFS='|' read -r fieldName fieldType _; do
-            fields+=("$fieldName")
-            fieldsType+=("$fieldType")
-        done < "./${tableName}-metadata" 
-    else
-        echo "Error: Metadata file '${tableName}-metadata' does not exist!" >> ../../logs.txt
+    if [[ $(ls | wc -l) == 0 ]]; then
+        echo -e "\033[0;33mYou don't have any tables yet!\033[0m"
+        return
     fi
 
+    read -p "Enter the table you want to enter your data into: " tableName
     if [[ $tableName =~ ^[A-Za-z_]+$ && -f "./$tableName" ]]; then
+        # Read metadata file line by line
+        fields=()
+        fieldsType=()
+        if [[ -f "./${tableName}-metadata" ]]; then
+            while IFS='|' read -r fieldName fieldType _; do
+                fields+=("$fieldName")
+                fieldsType+=("$fieldType")
+            done < "./${tableName}-metadata" 
+        else
+            echo "Error: Metadata file '${tableName}-metadata' does not exist!" >> ../../logs.txt
+        fi
+
         declare i=0
         line=""
         while (( i < ${#fields[@]} )); do
@@ -113,18 +120,15 @@ function insertIntoTable {
                     continue
                 fi
 
-                allPrimaryFieldValues=$(cut -d'|' -f ${i+1} "./$tableName") 
-                values_array=($(echo "$allPrimaryFieldValues" | cut -d'|' -f 1)) 
-                duplicate_found=0
-
                 # Check if value is duplicated 
-                allPrimaryFieldValues=$(cut -d'|' -f ${i+1} "./$tableName") 
+                allPrimaryFieldValues=()
+                if [[ -f "./${tableName}-metadata" ]]; then
+                    while IFS='|' read -r PKFieldValue _; do
+                        allPrimaryFieldValues+=$PKFieldValue
+                    done < "./$tableName" 
+                fi
 
-                # Count occurrences of $value in $allPrimaryFieldValues
-                occurrences=$(echo "$allPrimaryFieldValues" | grep -c "$value")
-
-                # If $occurrences is greater than ot equal 1, value is duplicated
-                if [[ $occurrences -ge 1 ]]; then
+                if [[ $allPrimaryFieldValues =~ $value ]]; then
                     echo -e "\033[31mThis value is duplicated, enter a unique value!\033[0m"
                     continue
                 fi
@@ -288,6 +292,142 @@ function selectRow {
      done
 }
 
+
+function deleteTable {
+        read -p "enter table you want to connect to: " reply
+  if [ -f ./$reply ];
+ then
+ echo -e "\e[32myou are now inside table $reply ...\e[0m"
+ select choice in "Delete All" "Delete Column" "Delete Row" "Drop Table" "Exit" ;
+ do
+    case $choice in
+
+         "Delete All")
+                 cat /dev/null > ./$reply
+                 echo "Content Deleted Successfully.."
+                 ;;
+
+        "Delete Column")
+                deleteColumn
+            ;;
+        "Delete Row")
+                deleteRow
+
+        #selectColumn
+
+       ;;
+
+        "Drop Table")
+
+         read -p "Are You Sure You Want To Drop This Table(y/n)? " answer
+
+         # selectRow
+
+         if [ $answer == 'y' ];
+         then
+                 rm ./$reply && rm ./$reply-metadata
+                  echo -e  "\e[32mTable Deleted Successfully Now You Are Back To Main Menu...\e[0m"
+                  parentMenu
+
+         else
+                  selectTable
+         fi
+           ;;
+        "Exit")
+            exit
+            ;;
+        *)
+         echo -e  "\e[31mWrong choice!\e[0m"  
+            ;;
+    esac
+done
+
+else
+ echo -e "\033[0;31mtable $reply does not exist in $PWD\033[0m"
+fi
+}
+
+function deleteRow {
+    local column_names=($(head -n 1 "./$reply" | tr '|' '\n'))
+    local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
+    local value_found=false
+
+    PS3="Choose option: "
+    options=("${column_names[@]}" "Exit")
+
+    select column_choice in "${options[@]}"; do
+        case $REPLY in
+            [1-${#options[@]}])
+                if [[ $column_choice == "Exit" ]]; then
+                    exit
+                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; then
+                    read -p "Enter value: " value
+                    echo "Matching rows for $column_choice = $value:"
+                    value_found=false
+
+                    if [[ -z "$var" ]]; then
+                        echo "Empty table"
+                    else
+                        while IFS= read -r line; do
+                            if [[ "$line" == *"$value"* ]]; then
+                                echo -e "\033[0;95m$line\033[0m"
+                                value_found=true
+                            fi
+                        done <<< "$var"
+
+                        if [[ "$value_found" == true ]]; then
+                            awk -F "|" -v value="$value" '$0 !~ value' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                            echo "Row(s) containing $value deleted successfully."
+                        else
+                            echo "$value does not exist in any row."
+                        fi
+                    fi
+                fi
+                ;;
+            *)
+                echo -e "\033[0;31mInvalid Input\033[0m"
+                ;;
+        esac
+    done
+}
+
+deleteColumn() {
+    # Read column names from metadata file
+    local column_names=($(awk -F '|' '{print $1}' "${reply}-metadata"))
+    PS3="Select a column to delete or exit: "
+    
+    options=("${column_names[@]}" "Exit")
+
+    select column_choice in "${options[@]}"; do
+        case $REPLY in
+            [1-$(( ${#options[@]} ))])
+                if [[ $column_choice == "Exit" ]]; then
+                    exit
+                else
+                    # Check if the selected column is the primary key
+                    local primary_key_column=$(awk -F '|' '{ if ($3 == "PK") print $1 }' "${reply}-metadata")
+                    if [[ $column_choice == "$primary_key_column" ]]; then
+                        echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
+                    else
+                        # Delete the selected column
+                        awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { $column=""; sub(/\|/, ""); print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                        echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
+
+                        # Remove the deleted column from column_names array
+                        unset 'column_names[$REPLY-1]'
+                        column_names=("${column_names[@]}")
+
+                        # Update the metadata file
+                        awk -v deleted_column="$column_choice" -F '|' 'BEGIN{OFS=FS} $1 != deleted_column { print }' "${reply}-metadata" > "${reply}-metadata.tmp" && mv "${reply}-metadata.tmp" "${reply}-metadata"
+                    fi
+                fi
+                ;;
+            *)
+                echo -e "\033[0;31mInvalid Input\033[0m"
+                ;;
+        esac
+    done
+}
 
 
 
