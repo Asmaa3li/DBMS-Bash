@@ -36,7 +36,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 ### 2- List all tables
 
 <div style="text-align: center;">
-    <img src="images/4.png" alt="Image 1" width="700">
+    <img src="images/4.png" alt="Image 1" width="700" height="300">
 </div>
 
 ### 3- Insert into a table
