@@ -20,7 +20,9 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 # Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)
+<div style="text-align: center;">
+    <img src="images/2.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+</div>
 
 
 ### 1- Create a Table
@@ -32,12 +34,16 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 5. If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the last field will be designated as the default primary key.
 6. You will be able to review the table schema before confirming the creation of the table.
 
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/834ed12a-a4fa-4463-a2f1-032147121b61)
+<div style="text-align: center;">
+    <img src="images/3.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+</div>
 
 
 ### 2- List all tables
 
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/6f1f7453-dc34-4a94-ab76-60a1e3aaafbb)
+<div style="text-align: center;">
+    <img src="images/4.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+</div>
 
 ### 3- Insert into a table
 #### Notes:
@@ -46,7 +52,9 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 3. The primary key field cannot be NULL.
 4. Each field, other than the primary key, can be NULL.
   
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/2255a490-d64c-419d-8968-3d85c88b3c60)
+<div style="text-align: center;">
+    <img src="images/5.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+</div>
 
 ### 4. Select from table
   * Select all<br>
@@ -55,7 +63,9 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * Enter another table<br>
   * Exit
       
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/1add22ae-4219-4ad8-b417-89d2661a73d9)
+<div style="text-align: center;">
+    <img src="images/6.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+</div>
 
 ### 5. Delete table
   * delete all<br>
@@ -63,7 +73,9 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * delete Row<br>
   * drop table
       
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/94a14d85-ff4f-4c8a-805e-bd2075add956)
+<div style="text-align: center;">
+    <img src="images/7.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+</div>
 
 ### 6- Update table
 ### 7- Back to main menu
