@@ -259,47 +259,55 @@ function selectColumn {
 }
 
 function selectRow {
-    local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+    local column_names=($(head -n 1 "./$reply" | tr '|' '\n'))
     local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
     local value_found=false
 
-    PS3="Choose option: "
-    options=("${column_names[@]}" "Exit")
+    while true; do
+        PS3="Choose option: "
+        options=("${column_names[@]}" "Exit")
 
-    select column_choice in "${options[@]}";
-      do
-        case $REPLY in
-           [1-${#options[@]}])
-             if [[ $column_choice == "Exit" ]]; 
-                then
-                   exit
+        select column_choice in "${options[@]}"; do
+            case $REPLY in
+                [1-${#options[@]}])
+                    if [[ $column_choice == "Exit" ]]; then
+                        exit
+                    else
+                        read -p "Enter value: " value
+                        echo "Matching rows for $column_choice = $value:"
 
-                elif [[ "${column_names[@]}" =~ "$column_choice" ]]; 
-                   then
-                     read -p "Enter value: " value
-                     echo "Matching rows for $column_choice = $value:"
+                        value_found=false
+                        for line in $var; do
+                            columns=($(echo "$line" | tr '|' ' '))
+                            column_index=-1
 
-                for line in $var; do
-                   if [[ "$line" == *"$value"* ]]; 
-                     then
-                        echo -e "\033[0;95m$line\033[0m"
-                       value_found=true
-                       selectTable
-                   fi
-               done
+                            # Find the index of the selected column in the column_names array
+                            for (( i=0; i<${#column_names[@]}; i++ )); do
+                                if [[ "${column_names[$i]}" == "$column_choice" ]]; then
+                                    column_index=$i
+                                    break
+                                fi
+                            done
 
-               if [[ "$value_found" == false ]]; 
-                 then
-                  echo "$value does not exist"
-               fi
-          fi
-          ;;
+                            # Check if the value in the selected column matches exactly the value provided by the user
+                            if [[ "${columns[$column_index]}" == "$value" ]]; then
+                                echo -e "\033[0;95m$line\033[0m"
+                                value_found=true
+                            fi
+                        done
 
-          *)
-            echo -e "\033[0;31mInvalid Input\033[0m"
-          ;;
-        esac
-     done
+                        if [[ "$value_found" == false ]]; then
+                            echo "$value does not exist"
+                        fi
+                    fi
+                    ;;
+                *)
+                    echo -e "\033[0;31mInvalid Input\033[0m"
+                    ;;
+            esac
+            break
+        done
+    done
 }
 
 
