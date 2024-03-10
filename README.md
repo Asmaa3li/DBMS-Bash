@@ -37,7 +37,8 @@ And upon user Connect to Specific Database, there will be new Screen with this M
     * delete Column
     * delete Row
     * drop table
-    ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/94a14d85-ff4f-4c8a-805e-bd2075add956)
+      
+![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/94a14d85-ff4f-4c8a-805e-bd2075add956)
 
 * Update table
 * Back to main menu
