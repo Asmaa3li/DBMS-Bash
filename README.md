@@ -12,13 +12,13 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Drop Database
 * Exit
   
-<img src="images/1.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+  <img src="images/1.png" alt="Image 1" width="700" height="200">
 
 
 # Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-<img src="images/2.png" alt="Image 1" width="700" style="margin: 0 auto;">
+  <img src="images/2.png" alt="Image 1" width="700">
 
 
 ### 1- Create a Table
@@ -30,12 +30,12 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 5. If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the last field will be designated as the default primary key.
 6. You will be able to review the table schema before confirming the creation of the table.
 
-<img src="images/3.png" alt="Image 1" width="700" height="400">
+  <img src="images/3.png" alt="Image 1" width="700" height="400">
 
 
 ### 2- List all tables
 
-    <img src="images/4.png" alt="Image 1" width="700" height="225">
+  <img src="images/4.png" alt="Image 1" width="700" height="225">
 
 ### 3- Insert into a table
 #### Notes:
@@ -44,7 +44,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 3. The primary key field cannot be NULL.
 4. Each field, other than the primary key, can be NULL.
   
-    <img src="images/5.png" alt="Image 1" width="700" height="400">
+  <img src="images/5.png" alt="Image 1" width="700" height="400">
 
 ### 4. Select from table
   * Select all<br>
@@ -52,10 +52,8 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * Select Row<br>
   * Enter another table<br>
   * Exit
-      
-<div style="text-align: center;">
-    <img src="images/6.png" alt="Image 1" width="700">
-</div>
+
+  <img src="images/6.png" alt="Image 1" width="700">
 
 ### 5. Delete table
   * delete all<br>
@@ -63,9 +61,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * delete Row<br>
   * drop table
       
-<div style="text-align: center;">
-    <img src="images/7.png" alt="Image 1" width="700">
-</div>
+  <img src="images/7.png" alt="Image 1" width="700">
 
 ### 6- Update table
 ### 7- Back to main menu
