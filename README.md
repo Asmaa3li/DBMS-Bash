@@ -45,7 +45,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/2255a490-d64c-419d-8968-3d85c88b3c60)
 
-### Select from table
+## 4- Select from table
     * Select all
     * Select Column
     * Select Row
@@ -54,7 +54,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
       
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/1add22ae-4219-4ad8-b417-89d2661a73d9)
 
-### Delete table
+## 5- Delete table
     * delete all
     * delete Column
     * delete Row
@@ -64,4 +64,4 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 
 ### Update table
 ### Back to main menu
-**Exit**
+### Exit
