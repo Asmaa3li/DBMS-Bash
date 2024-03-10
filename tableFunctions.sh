@@ -227,7 +227,8 @@ function selectTable {
 
 function selectColumn {
 
-    local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+    # local column_names=($(cat "./$reply" | head -n 1 | tr '|' '\n'))
+    local column_names=($(awk -F '|' '{print $1}' "${reply}-metadata"))
     options=("${column_names[@]}" "Exit")
     PS3="Select an option: "
 
@@ -257,6 +258,7 @@ function selectColumn {
             esac
         done
 }
+
 
 function selectRow {
     local column_names=($(head -n 1 "./$reply" | tr '|' '\n'))
@@ -364,6 +366,43 @@ else
 fi
 }
 
+# function deleteColumn {
+#     # local reply=$1
+#     local column_names=($(head -n 1 "$reply"))
+#     PS3="Select a column to delete or exit: "
+    
+#     options=("${column_names[@]}" "Exit")
+
+#     select column_choice in "${options[@]}"; doc
+#         case $REPLY in
+#             [1-$(( ${#options[@]} ))])
+#                 if [[ $column_choice == "Exit" ]]; then
+#                     exit
+#                 else
+#                     # Check if the selected column is the primary key
+#                     local primary_key_column=$(awk -F '|' '{ if ($3 == "PK") print $1 }' "${reply}-metadata")
+#                     if [[ $column_choice == "$primary_key_column" ]]; then
+#                         echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
+#                     else
+#                         # Ensure the selected column is not the last column
+#                         if [[ "$column_choice" == "${column_names[-1]}" ]]; then
+#                             echo -e "\033[31mCannot delete the last column.\033[0m"
+#                         else
+#                             # Delete the selected column from data file
+#                             awk -v column="$column_choice" 'BEGIN{FS=OFS="|"} { if (NR==1) { for (i=1; i<=NF; i++) { if ($i==column) { $i=""; sub(/\|$/, ""); print } } } else { for (i=1; i<=NF; i++) { if ($i==column) { $i=""; gsub(/\|\|/, "|"); sub(/^\|/, ""); } } print } }' "$reply" > "${reply}.tmp" && mv "${reply}.tmp" "$reply"
+#                             echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
+#                         fi
+#                     fi
+#                 fi
+#                 ;;
+#             *)
+#                 echo -e "\033[0;31mInvalid Input\033[0m"
+#                 ;;
+#         esac
+#     done
+# }
+
+
 function deleteRow {
     local column_names=($(head -n 1 "./$reply" | tr '|' '\n'))
     local var=$(awk -F "|" 'NR>1{print $0}' ./$reply)
@@ -451,13 +490,13 @@ function updateTable {
     
     # Check if the table exists
     if [[ ! -f "./$reply" ]]; then
-        echo "Table '$reply' does not exist"
-        return
+    echo -e "\033[0;33mTable '$reply' does not exist\033[0m"
+         return
     fi
 
     # Check if the table is empty
     if [[ ! -s "./$reply" ]]; then
-        echo "Table '$reply' is empty"
+    echo -e "\033[0;33mTable '$reply' does not exist\033[0m"
         return
     fi
 
@@ -475,7 +514,9 @@ function updateTable {
         fi
     done < "$metadata"
 
-    PS3="Select a column to update or Exit: "
+    # PS3="Select a column to update or Exit: "
+    PS3=$'\e[36m'"Select a column to update or Exit: "$'\e[0m'
+
     options=("${column_names[@]}" "Exit")
 
     select column_choice in "${options[@]}"; do
@@ -483,29 +524,60 @@ function updateTable {
             [1-$(( ${#column_names[@]} + 1 ))])
                 if [[ $column_choice == "Exit" ]]; then
                     exit
-                elif [[ $column_choice == "$primary_key_column" ]]; then
-                   echo -e "\e[31mYou cannot update the primary key column.\e[0m"
                 else
                     column_index=$((REPLY - 1))
-                    read -p "Enter the old value for $column_choice: " old_value
+                    echo -e "\033[0;35mEnter the old value for $column_choice: \033[0m"
+                    read -r old_value
                     
-                    if ! awk -F "|" -v column="$REPLY" -v old="$old_value" '$column == old { found=1; exit } END { exit !found }' "./$reply"; then
-                        echo -e "\e[31mOld value '$old_value' does not exist in column '$column_choice'\e[0m"
-                        continue
-                    fi
-                    
-                    read -p "Enter the new value for $column_choice: " new_value
+                    if [[ $column_choice == "$primary_key_column" ]]; then
+                        if ! awk -F "|" -v column="$REPLY" -v old="$old_value" '$column == old { found=1; exit } END { exit !found }' "./$reply"; then
+                            echo -e "\e[31mOld value '$old_value' does not exist in column '$column_choice'\e[0m"
+                            continue
+                        else
+                           echo -e "\033[0;35mEnter the new value for $column_choice: \033[0m"
+                           read -r new_value
 
-                    # Validate data type for the new value
-                    if [[ ${data_types[$column_index]} == "int" && ! $new_value =~ ^[0-9]+$ ]]; then
-                        echo "Invalid data type for $column_choice. Must be an integer."
-                    elif [[ ${data_types[$column_index]} == "string" && ! $new_value =~ ^[a-zA-Z]+$ ]]; then
-                    echo -e "\e[31mInvalid data type for $column_choice. Must be a string.\e[0m"
+
+                            # Check if the new value is not NULL
+                            if [[ $new_value == "NULL" ]]; then
+                                echo -e "\e[31mWARNING:\e[0mNew value for '$column_choice' cannot be NULL"
+                                continue
+                            fi
+
+                            # Check if the new value already exists in the column
+                            if [[ "$new_value" != "$old_value" && $(grep -c "^$new_value|" "./$reply") -gt 0 ]]; then
+                                echo -e "'$new_value' already exists in column '$column_choice'. \e[31mIt must be unique.\e[0m"
+                                continue
+                            fi
+
+                            # Validate data type for the new value
+                            if [[ ${data_types[$column_index]} == "int" && ! $new_value =~ ^[0-9]+$ ]]; then
+                           echo -e "\033[0;33mInvalid data type for $column_choice. Must be an integer.\033[0m"
+                            elif [[ ${data_types[$column_index]} == "string" && ! $new_value =~ ^[a-zA-Z]+$ ]]; then
+                           echo -e "\033[0;33mInvalid data type for $column_choice. Must be a string.\033[0m"
+                            else
+
+                                awk -F "|" -v column="$REPLY" -v old="$old_value" -v new="$new_value" 'BEGIN{OFS=FS} { if ($column == old) $column = new; print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                                echo -e "\e[32mColumn '$column_choice' updated successfully.\e[0m"
+                            fi
+                        fi
                     else
-                        # move old value into tmp
-                        awk -F "|" -v column="$REPLY" -v old="$old_value" -v new="$new_value" 'BEGIN{OFS=FS} { if ($column == old) $column = new; print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                        if ! awk -F "|" -v column="$REPLY" -v old="$old_value" '$column == old { found=1; exit } END { exit !found }' "./$reply"; then
+                            echo -e "\e[31mOld value '$old_value' does not exist in column '$column_choice'\e[0m"
+                            continue
+                        fi
+                        read -p "Enter the new value for $column_choice: " new_value
 
-                        echo -e "\e[32mColumn '$column_choice' updated successfully.\e[0m"
+                        # Validate data type for the new value
+                        if [[ ${data_types[$column_index]} == "int" && ! $new_value =~ ^[0-9]+$ ]]; then
+                            echo "Invalid data type for $column_choice. Must be an integer."
+                        elif [[ ${data_types[$column_index]} == "string" && ! $new_value =~ ^[a-zA-Z]+$ ]]; then
+                            echo -e "\e[31mInvalid data type for $column_choice. Must be a string.\e[0m"
+                        else
+                            # Update the value in the data file
+                            awk -F "|" -v column="$REPLY" -v old="$old_value" -v new="$new_value" 'BEGIN{OFS=FS} { if ($column == old) $column = new; print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+                            echo -e "\e[32mColumn '$column_choice' updated successfully.\e[0m"
+                        fi
                     fi
                 fi
                 ;;
