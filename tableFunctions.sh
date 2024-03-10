@@ -327,7 +327,7 @@ function deleteTable {
                  ;;
 
         "Delete Column")
-                deleteColumn
+                deleteColumn "$reply"
             ;;
         "Delete Row")
                 deleteRow
@@ -365,42 +365,6 @@ else
  echo -e "\033[0;31mtable $reply does not exist in $PWD\033[0m"
 fi
 }
-
-# function deleteColumn {
-#     # local reply=$1
-#     local column_names=($(head -n 1 "$reply"))
-#     PS3="Select a column to delete or exit: "
-    
-#     options=("${column_names[@]}" "Exit")
-
-#     select column_choice in "${options[@]}"; doc
-#         case $REPLY in
-#             [1-$(( ${#options[@]} ))])
-#                 if [[ $column_choice == "Exit" ]]; then
-#                     exit
-#                 else
-#                     # Check if the selected column is the primary key
-#                     local primary_key_column=$(awk -F '|' '{ if ($3 == "PK") print $1 }' "${reply}-metadata")
-#                     if [[ $column_choice == "$primary_key_column" ]]; then
-#                         echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
-#                     else
-#                         # Ensure the selected column is not the last column
-#                         if [[ "$column_choice" == "${column_names[-1]}" ]]; then
-#                             echo -e "\033[31mCannot delete the last column.\033[0m"
-#                         else
-#                             # Delete the selected column from data file
-#                             awk -v column="$column_choice" 'BEGIN{FS=OFS="|"} { if (NR==1) { for (i=1; i<=NF; i++) { if ($i==column) { $i=""; sub(/\|$/, ""); print } } } else { for (i=1; i<=NF; i++) { if ($i==column) { $i=""; gsub(/\|\|/, "|"); sub(/^\|/, ""); } } print } }' "$reply" > "${reply}.tmp" && mv "${reply}.tmp" "$reply"
-#                             echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
-#                         fi
-#                     fi
-#                 fi
-#                 ;;
-#             *)
-#                 echo -e "\033[0;31mInvalid Input\033[0m"
-#                 ;;
-#         esac
-#     done
-# }
 
 
 function deleteRow {
@@ -447,9 +411,12 @@ function deleteRow {
     done
 }
 
+
+
 deleteColumn() {
     # Read column names from metadata file
-    local column_names=($(awk -F '|' '{print $1}' "${reply}-metadata"))
+    local reply=$1
+    local column_names=($(awk -F '|' '{print $1}' "${reply}-metadata"))  # Exclude the first line (header)
     PS3="Select a column to delete or exit: "
     
     options=("${column_names[@]}" "Exit")
@@ -461,22 +428,27 @@ deleteColumn() {
                     exit
                 else
                     # Check if the selected column is the primary key
-                    local primary_key_column=$(awk -F '|' '{ if ($3 == "PK") print $1 }' "${reply}-metadata")
+                    local primary_key_column=$(awk -F '|' '$3 == "PK" { print $1 }' "${reply}-metadata")
                     if [[ $column_choice == "$primary_key_column" ]]; then
                         echo -e "\033[31mYou cannot delete the primary key column.\033[0m"
                     else
-                        # Delete the selected column
-                        awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { $column=""; sub(/\|/, ""); print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
-                        echo -e "\033[32mColumn '$column_choice' deleted successfully.\033[0m"
+                        # Check if the selected column is the last column
+                        # Check if the selected column is the last column
+local last_column=$(awk -F '|' '{print $NF}' "${reply}-metadata")
+if [[ "$column_choice" == "$last_column" ]]; then
+    # Delete the selected column from data and adjust formatting
+    awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { if (NR == 1) { $column=""; sub(/\|$/, ""); } else { $column=""; if (NF > 1 && column == NF) sub(/\|[^|]*$/, ""); } print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+else
+    # Delete the selected column from data without adjusting formatting
+    awk -F "|" -v column="$REPLY" 'BEGIN{OFS=FS} { $column=""; print }' "./$reply" > "./$reply.tmp" && mv "./$reply.tmp" "./$reply"
+fi
+echo -e "\033[32mColumn '$column_choice' deleted successfully from data.\033[0m"
 
-                        # Remove the deleted column from column_names array
-                        unset 'column_names[$REPLY-1]'
-                        column_names=("${column_names[@]}")
+fi
+fi
 
-                        # Update the metadata file
-                        awk -v deleted_column="$column_choice" -F '|' 'BEGIN{OFS=FS} $1 != deleted_column { print }' "${reply}-metadata" > "${reply}-metadata.tmp" && mv "${reply}-metadata.tmp" "${reply}-metadata"
-                    fi
-                fi
+
+
                 ;;
             *)
                 echo -e "\033[0;31mInvalid Input\033[0m"
@@ -484,6 +456,8 @@ deleteColumn() {
         esac
     done
 }
+
+
 
 function updateTable {
     read -p "Enter table name: " reply
@@ -566,8 +540,8 @@ function updateTable {
                             echo -e "\e[31mOld value '$old_value' does not exist in column '$column_choice'\e[0m"
                             continue
                         fi
-                        read -p "Enter the new value for $column_choice: " new_value
-
+                           echo -e "\033[0;35mEnter the new value for $column_choice: \033[0m"
+                           read -r new_value
                         # Validate data type for the new value
                         if [[ ${data_types[$column_index]} == "int" && ! $new_value =~ ^[0-9]+$ ]]; then
                             echo "Invalid data type for $column_choice. Must be an integer."
