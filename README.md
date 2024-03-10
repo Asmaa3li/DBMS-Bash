@@ -12,7 +12,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Drop Database
 * Exit
   
-![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/70234de3-7c5d-4b85-b360-ddcf57a5e7d5)
+<img src="images/image1.png" alt="Image 1" width="200" height="200">
 
 
 # Connect To Database Menu:
