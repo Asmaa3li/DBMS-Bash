@@ -18,7 +18,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 # Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-<img src="images/2.png" alt="Image 1" width="700" height="150" style="margin: 0 auto;">
+<img src="images/2.png" alt="Image 1" width="700" style="margin: 0 auto;">
 
 
 ### 1- Create a Table
@@ -30,13 +30,13 @@ And upon user Connect to Specific Database, there will be new Screen with this M
 5. If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the last field will be designated as the default primary key.
 6. You will be able to review the table schema before confirming the creation of the table.
 
-<img src="images/3.png" alt="Image 1" width="700" height="400" style="margin: 0 200;">
+<img src="images/3.png" alt="Image 1" width="700" height="400">
 
 
 ### 2- List all tables
 
 <div style="text-align: center;">
-    <img src="images/4.png" alt="Image 1" width="700" height="250" style="margin: 0 auto;">
+    <img src="images/4.png" alt="Image 1" width="700">
 </div>
 
 ### 3- Insert into a table
@@ -58,7 +58,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * Exit
       
 <div style="text-align: center;">
-    <img src="images/6.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+    <img src="images/6.png" alt="Image 1" width="700">
 </div>
 
 ### 5. Delete table
@@ -68,7 +68,7 @@ And upon user Connect to Specific Database, there will be new Screen with this M
   * drop table
       
 <div style="text-align: center;">
-    <img src="images/7.png" alt="Image 1" width="700" height="200" style="margin: 0 auto;">
+    <img src="images/7.png" alt="Image 1" width="700">
 </div>
 
 ### 6- Update table
