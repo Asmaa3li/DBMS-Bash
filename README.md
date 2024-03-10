@@ -5,8 +5,7 @@ The Project aims to develop DBMS CLI Menu based app that will enables users to h
 * Clone the repository:git `clone https://github.com/Asmaa3li/DBMS-Bash.git`
 * Run the dbms.sh script `./dbms.sh`
 
-# Features 
-Main Menu:
+# Main Menu:
 * Create Database
 * List Databases
 * Connect To Databases
@@ -16,13 +15,33 @@ Main Menu:
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/70234de3-7c5d-4b85-b360-ddcf57a5e7d5)
 
 
+# Connect To Database Menu:
 And upon user Connect to Specific Database, there will be new Screen with this Menu:
 
 ![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/a7313d3a-b4a3-44a6-a176-00f36484a2e1)
 
-* Create table
+**Create table**
+1- Enter the number of the fields
+2- Enter a valid field name.
+3- Enter a valid field type.
+4- Field names must not be duplicated.
+5- If you choose a primary key, you will not be prompted to choose another one. If you do not choose one at all, then the 
+   last field will be designated as the default primary key.
+  
+![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/834ed12a-a4fa-4463-a2f1-032147121b61)
+
 * List all tables
+
+![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/6f1f7453-dc34-4a94-ab76-60a1e3aaafbb)
+
 * Insert into table
+1- Enter valid values for each field.
+2- The primary key field must have unique values.
+3- The primary key field cannot be NULL.
+4- Each field, other than the primary key, can be NULL.
+  
+![image](https://github.com/Asmaa3li/DBMS-Bash/assets/57088227/2255a490-d64c-419d-8968-3d85c88b3c60)
+
 * Select from table
     * Select all
     * Select Column
