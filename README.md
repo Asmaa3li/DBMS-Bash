@@ -2,7 +2,7 @@
 The Project aims to develop DBMS CLI Menu based app that will enables users to handle CRUD operations.
 
 # Installation
-* Clone the repository:git `clone https://github.com/Asmaa3li/DBMS-Bash.git`
+* Clone the repository `git clone https://github.com/Asmaa3li/DBMS-Bash.git`
 * Run the dbms.sh script `./dbms.sh`
 
 # Main Menu:
