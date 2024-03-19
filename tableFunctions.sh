@@ -125,12 +125,19 @@ function insertIntoTable {
                 # Check if value is duplicated 
                 duplicated=false
                 if [[ -f "./${tableName}-metadata" ]]; then
-                    while IFS='|' read -r PKFieldValue _; do
-                        if [[ $PKFieldValue == $value ]]; then
-                            duplicated=true
-                            break
-                        fi
-                    done < "./$tableName" 
+                    # Assuming the metadata file contains the position of the primary key field
+                    PKFieldPosition=$(awk -F'|' '$3=="PK"{print NR}' "./${tableName}-metadata")
+                    if [[ -n $PKFieldPosition ]]; then
+                        # Read the first line (header) to get the primary key field position in data
+                        # read -r header < "./$tableName"
+                        while IFS='|' read -r -a myfields; do
+                            PKFieldValue=${myfields[$((PKFieldPosition - 1))]}
+                            if [[ $PKFieldValue == $value ]]; then
+                                duplicated=true
+                                break
+                            fi
+                        done < "./$tableName"
+                    fi
                 fi
 
                 if [[ $duplicated == true ]]; then
